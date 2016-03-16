@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- 读取配置文件 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties"/>
+	</bean>
+	<!--  数据库连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass">
+			<value>${jdbc_driver}</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>${jdbc_url}</value>
+		</property>
+		<property name="user">
+			<value>${jdbc_user}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_password}</value>
+		</property>
+		<property name="minPoolSize">
+			<value>2</value>
+		</property>
+		<property name="maxStatements" value="1000"></property>
+		<property name="maxPoolSize" value="5"></property>
+		<property name="idleConnectionTestPeriod" value="120"></property>
+		<property name="maxIdleTime" value="300"></property>
+	</bean>
+	<!-- JdbcTemplate -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+	<bean id="dao" class="com.zkkq.dao.impl.ZKKQDaoImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+</beans>
